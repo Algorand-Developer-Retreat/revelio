@@ -1,0 +1,29 @@
+<div id="<%= dom_id project %>">
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Name:</strong>
+    <%= project.name %>
+  </p>
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Abbreviation:</strong>
+    <%= project.abbreviation %>
+  </p>
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Verified:</strong>
+    <%= project.verified %>
+  </p>
+
+  <% if !project.contracts.empty? %>
+    <% for i in project.contracts %>     
+  <div class="mt-2">
+            <%= link_to i.name, project_contract_path(project.abbreviation, i.id), 
+              class: "text-green-600 hover:text-green-800" %>
+        </div>
+    <% end %>
+      <% end %>
+  <% if project.user_id == Current.user.id %>
+        <div class="mt-2">
+          <%= link_to "Create Contract", new_project_contract_path(project.abbreviation), 
+              class: "text-green-600 hover:text-green-800" %>
+        </div>
+      <% end %>
+</div>

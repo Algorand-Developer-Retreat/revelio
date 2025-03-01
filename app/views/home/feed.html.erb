@@ -1,0 +1,19 @@
+<p style="color: green"><%= notice %></p>
+
+<h1 class="text-3xl font-bold underline mb-6">Projects</h1>
+<%= Current.user.email %>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+  <% @projects.each do |project| %>
+    <div class="border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+      <h2 class="text-xl font-semibold mb-2"><%= project.name %></h2>
+      <% if project.abbreviation.present? %>
+        <p class="text-gray-600 mb-4"><%= project.abbreviation %></p>
+      <% end %>
+      <%= link_to "View details", project_path(project.abbreviation), class: "text-blue-600 hover:text-blue-800" %>
+    </div>
+  <% end %>
+</div>
+
+<% if @projects.empty? %>
+  <p class="text-gray-500 text-center mt-4">No projects found.</p>
+<% end %>

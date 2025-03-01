@@ -1,0 +1,44 @@
+<%= form_with(model: [@project, contract], class: "contents") do |form| %>
+  <% if contract.errors.any? %>
+    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
+      <h2><%= pluralize(contract.errors.count, "error") %> prohibited this contract from being saved:</h2>
+
+      <ul class="list-disc ml-6">
+        <% contract.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="my-5">
+    <%= form.label :name %>
+    <%= form.text_field :name, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": contract.errors[:name].none?, "border-red-400 focus:outline-red-600": contract.errors[:name].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :version %>
+    <%= form.text_field :version, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": contract.errors[:version].none?, "border-red-400 focus:outline-red-600": contract.errors[:version].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :app_id %>
+    <%= form.number_field :app_id, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": contract.errors[:app_id].none?, "border-red-400 focus:outline-red-600": contract.errors[:app_id].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :round_valid_from %>
+    <%= form.text_field :round_valid_from, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": contract.errors[:round_valid_from].none?, "border-red-400 focus:outline-red-600": contract.errors[:round_valid_from].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :address %>
+    <%= form.text_field :address, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": contract.errors[:address].none?, "border-red-400 focus:outline-red-600": contract.errors[:address].any?}] %>
+  </div>
+
+  <%= form.hidden_field :project_id %>
+
+  <div class="inline">
+    <%= form.submit class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
+  </div>
+<% end %>

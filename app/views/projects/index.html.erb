@@ -1,0 +1,25 @@
+<% content_for :title, "Projects" %>
+
+<div class="w-full">
+  <% if notice.present? %>
+    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
+  <% end %>
+
+  <div class="flex justify-between items-center">
+    <h1 class="font-bold text-4xl">Projects</h1>
+    <%= link_to "New project", new_project_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white block font-medium" %>
+  </div>
+
+  <div id="projects" class="min-w-full">
+    <% if @projects.any? %>
+      <% @projects.each do |project| %>
+        <%= render project %>
+        <p>
+          <%= link_to "Show this project", project_path(project.abbreviation), class: "ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
+        </p>
+      <% end %>
+    <% else %>
+      <p class="text-center my-10">No projects found.</p>
+    <% end %>
+  </div>
+</div>
