@@ -6,6 +6,7 @@ class HomeController < ApplicationController
   end
   def feed
     @projects = Project.all
+    @contracts = Contract.includes(:project).order(created_at: :desc).limit(20)
   end
 
   def about

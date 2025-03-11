@@ -1,4 +1,6 @@
-<%= form_with(model: project, class: "contents") do |form| %>
+<%= form_with(model: project, 
+              url: project.persisted? ? project_path(project.abbreviation) : projects_path, 
+              class: "contents") do |form| %>
   <% if project.errors.any? %>
     <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
       <h2><%= pluralize(project.errors.count, "error") %> prohibited this project from being saved:</h2>
@@ -23,7 +25,26 @@
 
   <div class="my-5">
     <%= form.label :verified %>
-    <%= form.checkbox :verified, class: ["block shadow rounded-md border outline-none mt-2 h-5 w-5", {"border-gray-400 focus:outline-blue-600": project.errors[:verified].none?, "border-red-400 focus:outline-red-600": project.errors[:verified].any?}] %>
+    <%= form.check_box :verified, class: ["block shadow rounded-md border outline-none mt-2 h-5 w-5", {"border-gray-400 focus:outline-blue-600": project.errors[:verified].none?, "border-red-400 focus:outline-red-600": project.errors[:verified].any?}] %>
+  </div>
+
+  <div class="space-y-2">
+    <%= form.label :description, class: "block font-medium" %>
+    <%= form.text_area :description, rows: 4, class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" %>
+    <p class="text-sm text-gray-500">Provide a brief description of your project</p>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :logo, "Project Logo" %>
+    <div class="mt-2">
+      <% if form.object.logo.attached? %>
+        <div class="mb-3">
+          <%= image_tag form.object.logo.variant(resize_to_limit: [100, 100]), class: "rounded-md" %>
+        </div>
+      <% end %>
+      <%= form.file_field :logo, accept: 'image/png,image/jpeg,image/jpg,image/gif,image/svg+xml', class: "block w-full text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>
+      <p class="text-sm text-gray-500 mt-1">Upload a logo for your project (PNG, JPEG, GIF, max 2MB)</p>
+    </div>
   </div>
 
   <div class="inline">

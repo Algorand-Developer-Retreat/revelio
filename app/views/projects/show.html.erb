@@ -5,13 +5,57 @@
     <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
   <% end %>
 
-  <h1 class="font-bold text-4xl">Showing project</h1>
-
+  <div class="flex items-center mb-6">
+    <% if @project.logo.attached? %>
+      <%= image_tag @project.logo, class: "mr-4 rounded-md w-20 h-20 object-contain" %>
+    <% else %>
+      <div class="w-20 h-20 bg-gray-100 rounded-md flex items-center justify-center mr-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+      </div>
+    <% end %>
+    <h1 class="font-bold text-4xl">
+      <%= @project.name %> (<%= @project.abbreviation %>)
+      <% if @project.verified %>
+        <svg fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 536.541 536.541" style="vertical-align: middle; display: inline-block;">
+<g>
+	<g>
+		<path d="M496.785,152.779c-3.305-25.085-16.549-51.934-38.826-74.205c-22.264-22.265-49.107-35.508-74.186-38.813
+			c-11.348-1.499-26.5-7.766-35.582-14.737C328.111,9.626,299.764,0,268.27,0s-59.841,9.626-79.921,25.024
+			c-9.082,6.965-24.235,13.238-35.582,14.737c-25.08,3.305-51.922,16.549-74.187,38.813c-22.277,22.271-35.521,49.119-38.825,74.205
+			c-1.493,11.347-7.766,26.494-14.731,35.57C9.621,208.422,0,236.776,0,268.27s9.621,59.847,25.024,79.921
+			c6.971,9.082,13.238,24.223,14.731,35.568c3.305,25.086,16.548,51.936,38.825,74.205c22.265,22.266,49.107,35.51,74.187,38.814
+			c11.347,1.498,26.5,7.771,35.582,14.736c20.073,15.398,48.421,25.025,79.921,25.025s59.841-9.627,79.921-25.025
+			c9.082-6.965,24.234-13.238,35.582-14.736c25.078-3.305,51.922-16.549,74.186-38.814c22.277-22.27,35.521-49.119,38.826-74.205
+			c1.492-11.346,7.766-26.492,14.73-35.568c15.404-20.074,25.025-48.422,25.025-79.921c0-31.494-9.621-59.848-25.025-79.921
+			C504.545,179.273,498.277,164.126,496.785,152.779z M439.256,180.43L246.477,373.209l-30.845,30.846
+			c-8.519,8.52-22.326,8.52-30.845,0l-30.845-30.846l-56.665-56.658c-8.519-8.52-8.519-22.326,0-30.846l30.845-30.844
+			c8.519-8.519,22.326-8.519,30.845,0l41.237,41.236L377.561,118.74c8.52-8.519,22.326-8.519,30.846,0l30.844,30.845
+			C447.775,158.104,447.775,171.917,439.256,180.43z"/>
+	</g>
+</g>
+</svg>
+      <% end %>
+    </h1>
+  </div>
+  <% if @project.description.present? %>
+  <div class="">
+    <h2 class="text-xl font-semibold mb-3">About</h2>
+    <div class="prose max-w-none">
+      <%= simple_format @project.description %>
+    </div>
+  </div>
+<% end %>
   <%= render @project %>
   <% if @project.user_id == Current.user.id %>
+      <%= link_to "Create Contract", new_project_contract_path(@project.abbreviation), 
+          class: "bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded shadow-sm transition-colors duration-200" %>
     <%= link_to "Edit this project", edit_project_path(@project.abbreviation), class: "mt-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
     <div class="inline-block ml-2">
     <%= button_to "Destroy this project", project_path(@project.abbreviation), method: :delete, class: "mt-2 rounded-md px-3.5 py-2.5 text-white bg-red-600 hover:bg-red-500 font-medium" %>
     </div>
     <% end %>
-    </div>
+
+  
+</div>
