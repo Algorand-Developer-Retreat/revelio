@@ -1,0 +1,10 @@
+<% if Rails.env.development? %>
+  <div class="mt-8 p-4 bg-gray-100 rounded-md">
+    <h3 class="font-bold mb-2">Debug Information</h3>
+    <div class="overflow-x-auto">
+      <p><strong>Project:</strong> <%= @project.inspect %></p>
+      <p><strong>Contract:</strong> <%= @contract.inspect %></p>
+      <p><strong>Errors:</strong> <%= @contract.errors.full_messages.join(', ') if @contract.errors.any? %></p>
+    </div>
+  </div>
+<% end %> 

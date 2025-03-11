@@ -10,9 +10,10 @@
   <%= render @contract %>
   
   <% if @project.user_id == Current.user.id %>
-    <%= link_to "Edit this contract", edit_project_contract_path(@project.abbreviation, @contract), class: "mt-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-    <div class="inline-block ml-2">
-      <%= button_to "Destroy this contract", project_contract_path(@project.abbreviation, @contract), method: :delete, class: "mt-2 rounded-md px-3.5 py-2.5 text-white bg-red-600 hover:bg-red-500 font-medium" %>
+    <div class="mt-4 space-x-2">
+      <%= link_to "Edit this contract", edit_project_contract_path(@project.abbreviation, @contract), class: "rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
+      <%= link_to "Upgrade Contract", upgrade_project_contract_path(@project.abbreviation, @contract), class: "rounded-md px-3.5 py-2.5 bg-blue-100 hover:bg-blue-50 inline-block font-medium" %>
+      <%= button_to "Destroy this contract", project_contract_path(@project.abbreviation, @contract), method: :delete, class: "rounded-md px-3.5 py-2.5 text-white bg-red-600 hover:bg-red-500 font-medium" %>
     </div>
   <% end %>
 </div>

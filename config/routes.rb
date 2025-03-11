@@ -14,8 +14,14 @@ Rails.application.routes.draw do
   get "about", to: "home#about"
   get "docs", to: "home#docs"
   get "feed", to: "home#feed"
-  resources :projects, param: 'abbreviation' do
-    resources :contracts
+  resources :projects, param: :abbreviation do
+    resources :contracts do
+      member do
+        get 'upgrade'
+        post 'create_upgrade'
+        get 'download_json'
+      end
+    end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

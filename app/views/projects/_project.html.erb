@@ -27,3 +27,26 @@
         </div>
       <% end %>
 </div>
+  <% if !project.contracts.empty? %>
+    <div class="mt-4">
+      <h3 class="font-medium text-lg mb-2">Contracts</h3>
+      <% project.contracts.where(parent_id: nil).each do |contract| %>
+        <details class="mb-2">
+          <summary class="cursor-pointer hover:text-gray-600">
+            <%= contract.name %> (v<%= contract.latest_version.version %>)
+          </summary>
+          <div class="pl-4 mt-2 space-y-2">
+            <% contract.all_versions.sort_by(&:version).reverse.each do |version| %>
+              <% if version.id == contract.id %>
+                <%= link_to "Base Version (#{version.version})", project_contract_path(project.abbreviation, version), 
+                    class: "block text-green-600 hover:text-green-800" %>
+              <% else %>
+                <%= link_to "Version #{version.version}", project_contract_path(project.abbreviation, version),
+                    class: "block text-green-600 hover:text-green-800" %>
+              <% end %>
+            <% end %>
+          </div>
+        </details>
+      <% end %>
+    </div>
+  <% end %>

@@ -1,0 +1,69 @@
+<% content_for :title, "Upgrade Contract" %>
+
+<div class="md:w-2/3 w-full">
+  <h1 class="font-bold text-4xl mb-6">Upgrade Contract</h1>
+  
+  <div class="mb-6 p-4 bg-gray-50 rounded-lg">
+    <h2 class="font-semibold text-lg mb-2">Original Contract</h2>
+    <p><strong>Name:</strong> <%= @contract.name %></p>
+    <p><strong>Version:</strong> <%= @contract.version %></p>
+    <p><strong>App ID:</strong> <%= @contract.app_id %></p>
+    <p><strong>Round Valid From:</strong> <%= @contract.round_valid_from %></p>
+    <p><strong>Address:</strong> <%= @contract.address %></p>
+  </div>
+
+  <%= form_with(model: [@project, @new_contract], 
+                url: create_upgrade_project_contract_path(@project.abbreviation, @contract), 
+                method: :post,
+                class: "space-y-6",
+                multipart: true) do |form| %>
+    <% if @new_contract.errors.any? %>
+      <div class="bg-red-50 text-red-500 px-4 py-3 rounded-md mb-4">
+        <h2 class="font-medium"><%= pluralize(@new_contract.errors.count, "error") %> prohibited this contract from being saved:</h2>
+        <ul class="list-disc ml-5 mt-2">
+          <% @new_contract.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="space-y-2">
+      <%= form.label :name, class: "block font-medium" %>
+      <%= form.text_field :name, value: @contract.name, class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" %>
+    </div>
+
+    <div class="space-y-2">
+      <%= form.label :version, class: "block font-medium" %>
+      <%= form.number_field :version, value: @contract.version + 0.1, step: 0.1, class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" %>
+    </div>
+
+    <div class="space-y-2">
+      <%= form.label :app_id, class: "block font-medium" %>
+      <%= form.number_field :app_id, value: @contract.app_id, class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" %>
+    </div>
+
+    <div class="space-y-2">
+      <%= form.label :round_valid_from, class: "block font-medium" %>
+      <%= form.number_field :round_valid_from, value: @contract.round_valid_from, class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" %>
+    </div>
+
+    <div class="space-y-2">
+      <%= form.label :address, class: "block font-medium" %>
+      <%= form.text_field :address, value: @contract.address, class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" %>
+    </div>
+
+    <div class="space-y-2">
+      <%= form.label :json_file, "ARC56 Contract Specification", class: "block font-medium" %>
+      <%= form.file_field :json_file, accept: 'application/json', class: "block w-full text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>
+      <p class="text-sm text-gray-500 mt-1">Upload a new ARC56 specification or leave blank to use the same as the original contract</p>
+    </div>
+
+    <div class="pt-4">
+      <%= form.submit "Upgrade Contract", class: "rounded-md px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-medium cursor-pointer" %>
+      <%= link_to "Back to Contract", project_contract_path(@project.abbreviation, @contract), class: "ml-2 rounded-md px-4 py-2 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
+    </div>
+  <% end %>
+
+  <%= render 'debug' if Rails.env.development? %>
+</div> 

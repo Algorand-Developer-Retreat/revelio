@@ -1,8 +1,56 @@
 <% content_for :title, "New contract" %>
 
 <div class="md:w-2/3 w-full">
-  <h1 class="font-bold text-4xl">New contract</h1>
+  <h1 class="font-bold text-4xl mb-6">New contract</h1>
 
-  <%= render "form", contract: @contract %>
+  <%= form_with(model: [@project, @contract], url: project_contracts_path(@project.abbreviation), class: "space-y-6", multipart: true) do |form| %>
+    <% if @contract.errors.any? %>
+      <div class="bg-red-50 text-red-500 px-4 py-3 rounded-md mb-4">
+        <h2 class="font-medium"><%= pluralize(@contract.errors.count, "error") %> prohibited this contract from being saved:</h2>
+        <ul class="list-disc ml-5 mt-2">
+          <% @contract.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
 
+    <div class="space-y-2">
+      <%= form.label :name, class: "block font-medium" %>
+      <%= form.text_field :name, class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" %>
+    </div>
+
+    <div class="space-y-2">
+      <%= form.label :version, class: "block font-medium" %>
+      <%= form.number_field :version, value: 0.0, step: 0.1, class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" %>
+    </div>
+
+    <div class="space-y-2">
+      <%= form.label :app_id, class: "block font-medium" %>
+      <%= form.number_field :app_id, class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" %>
+    </div>
+
+    <div class="space-y-2">
+      <%= form.label :round_valid_from, class: "block font-medium" %>
+      <%= form.number_field :round_valid_from, class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" %>
+    </div>
+
+    <div class="space-y-2">
+      <%= form.label :address, class: "block font-medium" %>
+      <%= form.text_field :address, class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" %>
+    </div>
+
+    <div class="space-y-2">
+      <%= form.label :json_file, "ARC56 Contract Specification", class: "block font-medium" %>
+      <%= form.file_field :json_file, accept: 'application/json', class: "block w-full text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>
+      <p class="text-sm text-gray-500 mt-1">Upload a JSON file containing the ARC56 contract specification</p>
+    </div>
+
+    <div class="pt-4">
+      <%= form.submit "Create Contract", class: "rounded-md px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-medium cursor-pointer" %>
+      <%= link_to "Back to Project", project_path(@project.abbreviation), class: "ml-2 rounded-md px-4 py-2 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
+    </div>
+  <% end %>
+
+  <%= render 'debug' if Rails.env.development? %>
 </div>

@@ -5,21 +5,29 @@
     <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
   <% end %>
 
-  <div class="flex justify-between items-center">
+  <div class="flex justify-between items-center mb-8">
     <h1 class="font-bold text-4xl">Projects</h1>
     <%= link_to "New project", new_project_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white block font-medium" %>
   </div>
 
-  <div id="projects" class="min-w-full">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     <% if @projects.any? %>
       <% @projects.each do |project| %>
-        <%= render project %>
-        <p>
-          <%= link_to "Show this project", project_path(project.abbreviation), class: "ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-        </p>
+        <div class="border rounded-lg shadow-sm hover:shadow-md transition-shadow p-6">
+          <%= render project %>
+          <div class="mt-4 space-x-2">
+            <%= link_to "Show", project_path(project.abbreviation), class: "rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
+            <% if project.user_id == Current.user.id %>
+              <%= link_to "Edit", edit_project_path(project.abbreviation), class: "rounded-md px-3.5 py-2.5 bg-yellow-100 hover:bg-yellow-50 inline-block font-medium" %>
+              <%= button_to "Delete", project_path(project.abbreviation), method: :delete, class: "rounded-md px-3.5 py-2.5 bg-red-100 hover:bg-red-50 inline-block font-medium", form: { data: { turbo_confirm: "Are you sure?" } } %>
+            <% end %>
+          </div>
+        </div>
       <% end %>
     <% else %>
-      <p class="text-center my-10">No projects found.</p>
+      <div class="col-span-full text-center my-10">
+        <p class="text-gray-500">No projects found.</p>
+      </div>
     <% end %>
   </div>
 </div>

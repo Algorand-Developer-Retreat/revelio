@@ -23,4 +23,15 @@
     <strong class="block font-medium mb-1">Project:</strong>
     <%= contract.project_id %>
   </p>
+  <div class="mt-4">
+    <h3 class="font-medium">ARC56 Contract Specification:</h3>
+    <% if contract.arc56.present? %>
+      <div class="mt-2">
+        <pre class="bg-gray-50 p-4 rounded-md overflow-x-auto text-sm"><%= JSON.pretty_generate(JSON.parse(contract.arc56)) rescue contract.arc56 %></pre>
+        <%= link_to "Download ARC56 JSON", download_json_project_contract_path(@project.abbreviation, contract), class: "mt-2 text-blue-600 hover:text-blue-800 inline-flex items-center" %>
+      </div>
+    <% else %>
+      <p class="text-gray-500 italic">No ARC56 specification available</p>
+    <% end %>
+  </div>
 </div>
