@@ -27,7 +27,15 @@
     <h3 class="font-medium">ARC56 Contract Specification:</h3>
     <% if contract.arc56.present? %>
       <div class="mt-2">
-        <pre class="bg-gray-50 p-4 rounded-md overflow-x-auto text-sm"><%= JSON.pretty_generate(JSON.parse(contract.arc56)) rescue contract.arc56 %></pre>
+        <div class="bg-gray-50 rounded-md overflow-hidden relative">
+          <div class="absolute top-2 right-2">
+            <div id="json-content-<%= contract.id %>" class="hidden"><%= contract.arc56 %></div>
+            <button onclick="copyJsonToClipboard('<%= contract.id %>')" class="bg-white hover:bg-gray-100 text-gray-800 text-xs font-semibold py-1 px-2 border border-gray-200 rounded shadow">
+              Copy
+            </button>
+          </div>
+          <pre class="p-0 m-0"><code class="language-json"><%= JSON.pretty_generate(JSON.parse(contract.arc56)) rescue contract.arc56 %></code></pre>
+        </div>
         <%= link_to "Download ARC56 JSON", download_json_project_contract_path(@project.abbreviation, contract), class: "mt-2 text-blue-600 hover:text-blue-800 inline-flex items-center" %>
       </div>
     <% else %>
@@ -35,3 +43,30 @@
     <% end %>
   </div>
 </div>
+
+<script>
+  function copyJsonToClipboard(contractId) {
+    const jsonElement = document.getElementById(`json-content-${contractId}`);
+    const jsonContent = jsonElement.textContent;
+    
+    const button = event.currentTarget;
+    
+    navigator.clipboard.writeText(jsonContent).then(() => {
+      const originalText = button.textContent;
+      button.textContent = 'Copied!';
+      button.classList.add('bg-green-100', 'text-green-800');
+      setTimeout(() => {
+        button.textContent = originalText;
+        button.classList.remove('bg-green-100', 'text-green-800');
+      }, 2000);
+    }).catch(err => {
+      console.error('Failed to copy: ', err);
+      button.textContent = 'Failed!';
+      button.classList.add('bg-red-100', 'text-red-800');
+      setTimeout(() => {
+        button.textContent = 'Copy';
+        button.classList.remove('bg-red-100', 'text-red-800');
+      }, 2000);
+    });
+  }
+</script>

@@ -21,6 +21,11 @@
     <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+
+    <!-- Add highlight.js for JSON syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/json.min.js"></script>
   </head>
   <body class="h-full flex flex-col">
     <div class="flex-grow">
@@ -30,5 +35,21 @@
       </main>
     </div>
     <%= render "shared/footer" %>
+
+    <!-- Initialize highlight.js -->
+    <script>
+      document.addEventListener('turbo:load', function() {
+        document.querySelectorAll('pre code').forEach((block) => {
+          hljs.highlightBlock(block);
+        });
+      });
+      
+      // Also initialize on DOMContentLoaded for the first page load
+      document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('pre code').forEach((block) => {
+          hljs.highlightBlock(block);
+        });
+      });
+    </script>
   </body>
 </html>

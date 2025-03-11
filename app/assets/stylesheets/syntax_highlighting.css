@@ -1,0 +1,29 @@
+/* Custom styles for syntax highlighting */
+pre code.hljs {
+  padding: 1rem;
+  border-radius: 0.375rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  overflow-x: auto;
+}
+
+.hljs-attr {
+  color: #0550ae;
+}
+
+.hljs-string {
+  color: #0a3069;
+}
+
+.hljs-number {
+  color: #0550ae;
+}
+
+.hljs-literal {
+  color: #cf222e;
+}
+
+.hljs-punctuation {
+  color: #24292f;
+} 

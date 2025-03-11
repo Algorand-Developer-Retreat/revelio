@@ -115,14 +115,21 @@ class ContractsController < ApplicationController
   end
 
   def download_json
-    respond_to do |format|
-      format.json { 
-        send_data @contract.arc56, 
-                  type: 'application/json', 
-                  disposition: 'attachment',
-                  filename: "#{@contract.name.parameterize}-v#{@contract.version}.json" 
-      }
+    # Make sure we have the contract
+    unless @contract && @contract.arc56.present?
+      redirect_to project_contract_path(@project.abbreviation, @contract), 
+                  alert: "No ARC56 specification available for download"
+      return
     end
+    
+    # Set the filename based on the contract name and version
+    filename = "#{@contract.name.parameterize}-v#{@contract.version}.json"
+    
+    # Send the data as a downloadable file
+    send_data @contract.arc56, 
+              type: 'application/json', 
+              disposition: 'attachment',
+              filename: filename
   end
 
   private

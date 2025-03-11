@@ -80,11 +80,6 @@ class Contract < ApplicationRecord
         return
       end
       
-      # Validate arcs array includes 56
-      if !json_data['arcs'].include?(56)
-        errors.add(:arc56, "must include 56 in the arcs array")
-      end
-      
       # Validate all arcs are integers
       json_data['arcs'].each do |arc|
         unless arc.is_a?(Integer)
@@ -296,10 +291,12 @@ class Contract < ApplicationRecord
                         errors.add(:arc56, "state key '#{key_name}' in #{scope} is missing required fields: #{missing_key_fields.join(', ')}")
                       end
                       
-                      # Validate keyType
-                      if key_info.key?('keyType') && !['static', 'dynamic'].include?(key_info['keyType'])
-                        errors.add(:arc56, "state key '#{key_name}' in #{scope} keyType must be 'static' or 'dynamic'")
-                      end
+
+                      # TODO: refactor with avmtypes abitypes ffs
+                      # # Validate keyType
+                      # if key_info.key?('keyType') && !['ABIType','AVMType','StructName'].include?(key_info['keyType'])
+                      #   errors.add(:arc56, "state key '#{key_name}' in #{scope} keyType must be 'static' or 'dynamic'")
+                      # end
                       
                       # Validate valueType
                       if key_info.key?('valueType')
@@ -409,8 +406,8 @@ class Contract < ApplicationRecord
     # Basic types
     basic_types = [
       'uint8', 'uint16', 'uint32', 'uint64', 'uint128', 'uint256',
-      'byte', 'bytes', 'string', 'address', 'bool',
-      'pay', 'account', 'application', 'asset'
+      'byte', 'bytes', 'string', 'address', 'bool', 'void', 'AVMString',
+      'pay', 'account', 'application', 'asset', 'AVMBytes', 'AVMUint64'
     ]
     
     # Check if it's an array type
