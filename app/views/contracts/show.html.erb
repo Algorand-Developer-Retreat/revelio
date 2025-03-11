@@ -1,13 +1,105 @@
-<% content_for :title, "Showing contract" %>
+<% content_for :title, "#{@contract.name}" %>
 
 <div class="md:w-2/3 w-full">
   <% if notice.present? %>
     <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
   <% end %>
 
-  <h1 class="font-bold text-4xl">Showing contract</h1>
-
-  <%= render @contract %>
+  <div class="flex flex-col md:flex-row gap-6">
+    <div class="flex-1">
+      <h1 class="font-bold text-4xl"><%= @contract.name %></h1>
+      
+      <%= render @contract %>
+      
+      <% if @all_versions.size > 1 %>
+        <div class="mt-8">
+          <h2 class="text-xl font-semibold mb-4">Contract Versions</h2>
+          <div class="bg-white rounded-lg shadow-md border border-gray-200 p-4 overflow-hidden">
+            <div class="overflow-x-auto">
+              <ul class="divide-y divide-gray-200">
+                <% @all_versions.each do |version| %>
+                  <% is_current = version.id == @contract.id %>
+                  <li class="py-4 <%= is_current ? 'bg-blue-50 -mx-4 px-4' : '' %>">
+                    <div class="flex flex-row md:items-center justify-between gap-2">
+                      <div class="min-w-0">
+                        <span class="font-medium <%= is_current ? 'text-blue-600' : 'text-gray-900' %>">
+                          Version <%= version.version %>
+                          <% if is_current %>
+                            <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Current</span>
+                          <% end %>
+                        </span>
+                        <p class="text-sm text-gray-500 truncate">
+                          Created: <%= version.created_at.strftime("%B %d, %Y") %>
+                        </p>
+                      </div>
+                    </div>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    
+    <div class="md:w-1/3 sticky top-4 self-start">
+      <div class="bg-white rounded-lg shadow-md border border-gray-200 p-4">
+        <h2 class="text-xl font-semibold mb-3">Latest Contract</h2>
+        <% if @contract.address.present? %>
+          <div class="mb-3">
+            <p class="text-sm text-gray-500">Contract Address</p>
+            <p class="font-medium break-all"><%= @contract.address %></p>
+          </div>
+        <% end %>
+        
+        <% if @contract.app_id.present? %>
+          <div class="mb-3">
+            <p class="text-sm text-gray-500">Application ID</p>
+            <p class="font-medium"> <%= link_to @contract.app_id, "https://lora.algokit.io/mainnet/application/#{@contract.app_id}", target: "_blank" %></p>
+          </div>
+        <% end %>
+        
+        <div class="space-y-3">
+          <div>
+            <p class="text-sm text-gray-500">Version</p>
+            <p class="font-medium"><%= @contract.version %></p>
+          </div>
+          
+          <div>
+            <p class="text-sm text-gray-500">Project</p>
+            <p class="font-medium">
+              <%= link_to @project.name, project_path(@project.abbreviation), class: "text-blue-600 hover:text-blue-800" %>
+            </p>
+          </div>
+          
+          <% if @contract.created_at.present? %>
+            <div>
+              <p class="text-sm text-gray-500">Created</p>
+              <p class="font-medium"><%= @contract.created_at.strftime("%B %d, %Y") %></p>
+            </div>
+          <% end %>
+          
+          <% if @contract.updated_at.present? && @contract.updated_at != @contract.created_at %>
+            <div>
+              <p class="text-sm text-gray-500">Last Updated</p>
+              <p class="font-medium"><%= @contract.updated_at.strftime("%B %d, %Y") %></p>
+            </div>
+          <% end %>
+          
+          <% if @contract.arc56.present? %>
+            <div class="pt-2">
+              <%= link_to download_json_project_contract_path(@project.abbreviation, @contract), class: "text-blue-600 hover:text-blue-800 flex items-center" do %>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                Download ARC56
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
   
   <% if @project.user_id == Current.user.id %>
     <div class="mt-4 space-x-2">

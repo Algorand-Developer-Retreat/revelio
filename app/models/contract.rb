@@ -13,14 +13,26 @@ class Contract < ApplicationRecord
   validates :app_id, presence: true, numericality: { only_integer: true }
   validates :address, presence: true
 
-  # Returns the latest version of the contract
-  def latest_version
-    versions.order(created_at: :desc).first || self
-  end
-
-  # Returns all versions including the current contract
+  # Returns all versions of this contract (including this one)
+  # Sorted by version number
   def all_versions
-    parent_id.nil? ? [self] + versions.order(created_at: :asc) : []
+    # Find the root contract
+    root = self
+    while root.parent_id.present?
+      root = Contract.find(root.parent_id)
+    end
+    
+    # Get all versions starting from the root
+    versions = [root]
+    find_children(root, versions)
+    
+    # Sort by version number
+    versions.sort_by(&:version)
+  end
+  
+  # Returns the latest version of this contract
+  def latest_version
+    all_versions.last
   end
 
   # Creates a new version of the contract
@@ -429,6 +441,15 @@ class Contract < ApplicationRecord
     # Check if it's a basic type or a defined struct
     unless basic_types.include?(type) || (json_data.key?('structs') && json_data['structs'].key?(type))
       errors.add(:arc56, "#{context} has invalid type: #{type}")
+    end
+  end
+
+  # Recursively find all child contracts
+  def find_children(contract, versions_array)
+    children = Contract.where(parent_id: contract.id)
+    children.each do |child|
+      versions_array << child
+      find_children(child, versions_array)
     end
   end
 end

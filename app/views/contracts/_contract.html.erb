@@ -1,47 +1,53 @@
 <div id="<%= dom_id contract %>">
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Name:</strong>
-    <%= contract.name %>
-  </p>
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Version:</strong>
-    <%= contract.version %>
-  </p>
-  <p class="my-5">
-    <strong class="block font-medium mb-1">App:</strong>
-    <%= contract.app_id %>
-  </p>
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Round valid from:</strong>
-    <%= contract.round_valid_from %>
-  </p>
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Address:</strong>
-    <%= contract.address %>
-  </p>
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Project:</strong>
-    <%= contract.project_id %>
-  </p>
-  <div class="mt-4">
-    <h3 class="font-medium">ARC56 Contract Specification:</h3>
-    <% if contract.arc56.present? %>
-      <div class="mt-2">
-        <div class="bg-gray-50 rounded-md overflow-hidden relative">
-          <div class="absolute top-2 right-2">
-            <div id="json-content-<%= contract.id %>" class="hidden"><%= contract.arc56 %></div>
-            <button onclick="copyJsonToClipboard('<%= contract.id %>')" class="bg-white hover:bg-gray-100 text-gray-800 text-xs font-semibold py-1 px-2 border border-gray-200 rounded shadow">
-              Copy
-            </button>
-          </div>
-          <pre class="p-0 m-0"><code class="language-json"><%= JSON.pretty_generate(JSON.parse(contract.arc56)) rescue contract.arc56 %></code></pre>
-        </div>
-        <%= link_to "Download ARC56 JSON", download_json_project_contract_path(@project.abbreviation, contract), class: "mt-2 text-blue-600 hover:text-blue-800 inline-flex items-center" %>
+  <% if contract.name.present? %>
+    <div class="my-5">
+      <p class="my-5 text-lg leading-relaxed"><%= contract.name %></p>
+    </div>
+  <% end %>
+
+  <% if contract.arc56.present? %>
+    <div class="my-5">
+      <h3 class="text-lg font-medium">ARC56 Specification</h3>
+      <div class="mt-2 bg-gray-50 p-4 rounded-md overflow-auto">
+        <pre class="text-sm"><%= JSON.pretty_generate(JSON.parse(contract.arc56)) %></pre>
       </div>
-    <% else %>
-      <p class="text-gray-500 italic">No ARC56 specification available</p>
-    <% end %>
-  </div>
+    </div>
+  <% end %>
+
+  <% if contract.project.present? %>
+    <div class="my-5">
+      <strong class="block font-medium mb-1">Owner</strong>
+      <%= link_to contract.project.name, project_path(contract.project.abbreviation), class: "text-blue-600 hover:text-blue-800" %>
+    </div>
+  <% end %>
+
+  <% if contract.address.present? %>
+    <div class="my-5">
+      <strong class="block font-medium mb-1">Address</strong>
+      <div class="text-gray-700 break-all"><%= contract.address %></div>
+    </div>
+  <% end %>
+
+  <% if contract.app_id.present? %>
+    <div class="my-5">
+      <strong class="block font-medium mb-1">App ID:</strong>
+      <%= link_to contract.app_id, "https://lora.algokit.io/mainnet/application/#{contract.app_id}", target: "_blank", class: "text-blue-600 hover:text-blue-800" %>
+    </div>
+  <% end %>
+
+  <% if contract.version.present? %>
+    <div class="my-5">
+      <strong class="block font-medium mb-1">Version:</strong>
+      <%= contract.version %>
+    </div>
+  <% end %>
+
+  <% if contract.parent_id.present? %>
+    <div class="my-5">
+      <strong class="block font-medium mb-1">Parent Contract:</strong>
+      <%= link_to "View Parent Contract", project_contract_path(contract.project.abbreviation, contract.parent_id), class: "text-blue-600 hover:text-blue-800" %>
+    </div>
+  <% end %>
 </div>
 
 <script>

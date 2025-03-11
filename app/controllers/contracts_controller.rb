@@ -14,6 +14,9 @@ class ContractsController < ApplicationController
 
   # GET /contracts/1 or /contracts/1.json
   def show
+    @contract = Contract.find(params[:id])
+    @project = @contract.project
+    @all_versions = @contract.all_versions
   end
 
   # GET /contracts/new
