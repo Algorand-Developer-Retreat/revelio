@@ -52,7 +52,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_12_000002) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "parent_id"
-    t.text "arc56"
+    t.json "arc56"
     t.index ["parent_id"], name: "index_contracts_on_parent_id"
     t.index ["project_id"], name: "index_contracts_on_project_id"
   end

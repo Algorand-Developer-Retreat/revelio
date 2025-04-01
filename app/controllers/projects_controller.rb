@@ -5,11 +5,13 @@ class ProjectsController < ApplicationController
   # GET /projects or /projects.json
   def index
     @projects = Project.all
+    @breadcrumbs = [{ name: "Home", path: root_path }, { name: "Projects", path: projects_path }]
   end
 
   # GET /projects/1 or /projects/1.json
   def show
     @contracts = @project.contracts
+    @breadcrumbs = [{ name: "Home", path: root_path }, { name: "Projects", path: projects_path }, { name: @project.name, path: project_path(@project.abbreviation) }]
   end
 
   # GET /projects/new

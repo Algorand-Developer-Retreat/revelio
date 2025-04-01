@@ -5,7 +5,13 @@ class ContractsController < ApplicationController
 
   # GET /contracts or /contracts.json
   def index
-    @contracts = Contract.all
+    @contracts = @project.contracts
+    @breadcrumbs = [
+      { name: "Home", path: root_path },
+      { name: "Projects", path: projects_path },
+      { name: @project.name, path: project_path(@project.abbreviation) },
+      { name: "Contracts", path: project_contracts_path(@project.abbreviation) }
+    ]
   end
 
   def project_contracts
@@ -14,18 +20,35 @@ class ContractsController < ApplicationController
 
   # GET /contracts/1 or /contracts/1.json
   def show
-    @contract = Contract.find(params[:id])
-    @project = @contract.project
+    @breadcrumbs = [
+      { name: "Home", path: root_path },
+      { name: "Projects", path: projects_path },
+      { name: @project.name, path: project_path(@project.abbreviation) },
+      { name: @contract.name, path: project_contract_path(@project.abbreviation, @contract) }
+    ]
     @all_versions = @contract.all_versions
   end
 
   # GET /contracts/new
   def new
-    @contract = Contract.new
+    @contract = @project.contracts.new
+    @breadcrumbs = [
+      { name: "Home", path: root_path },
+      { name: "Projects", path: projects_path },
+      { name: @project.name, path: project_path(@project.abbreviation) },
+      { name: "Contracts", path: project_contracts_path(@project.abbreviation) },
+      { name: "New Contract", path: new_project_contract_path(@project.abbreviation) }
+    ]
   end
 
   # GET /contracts/1/edit
   def edit
+    @breadcrumbs = [
+      { name: "Home", path: root_path },
+      { name: "Projects", path: projects_path },
+      { name: @project.name, path: project_path(@project.abbreviation) },
+      { name: "Edit Contract", path: edit_project_contract_path(@project.abbreviation, @contract) }
+    ]
   end
 
   # POST /contracts or /contracts.json
@@ -36,10 +59,11 @@ class ContractsController < ApplicationController
     @contract.version = 0 if @contract.version.nil?
 
     # Handle JSON file upload
-    if params[:contract][:json_file].present?
+    if params[:contract][:arc56].present?
       begin
-        uploaded_file = params[:contract][:json_file]
-        @contract.arc56 = uploaded_file.read
+        uploaded_file = params[:contract][:arc56]
+        json_content = uploaded_file.read
+        @contract.arc56 = sanitize_json(json_content)
       rescue => e
         Rails.logger.error "Error reading JSON file: #{e.message}"
       end
@@ -74,9 +98,10 @@ class ContractsController < ApplicationController
         upgrade_params = contract_params.merge(project_id: @project.id)
         
         # Handle JSON file upload
-        if params[:contract][:json_file].present?
-          uploaded_file = params[:contract][:json_file]
-          upgrade_params[:arc56] = uploaded_file.read
+        if params[:contract][:arc56].present?
+          uploaded_file = params[:contract][:arc56]
+          json_content = uploaded_file.read
+          upgrade_params[:arc56] = json_content
         end
         
         @new_contract = @contract.create_version(upgrade_params)
@@ -163,5 +188,16 @@ class ContractsController < ApplicationController
     # Only allow a list of trusted parameters through.
     def contract_params
       params.require(:contract).permit(:name, :version, :app_id, :round_valid_from, :address, :project_id, :arc56)
+    end
+
+    def sanitize_json(json_content)
+      begin
+        parsed_json = JSON.parse(json_content)
+        Rails.logger.info "Parsed JSON: #{parsed_json}"
+        JSON.pretty_generate(parsed_json)
+      rescue JSON::ParserError => e
+        Rails.logger.error "Invalid JSON format: #{e.message}"
+        nil
+      end
     end
 end

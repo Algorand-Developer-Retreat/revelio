@@ -1,0 +1,14 @@
+<nav class="text-sm text-gray-500 mb-4" aria-label="Breadcrumb">
+  <ol class="list-none p-0 inline-flex">
+    <% breadcrumbs.each_with_index do |breadcrumb, index| %>
+      <li class="flex items-center">
+        <% if index < breadcrumbs.length - 1 %>
+          <%= link_to breadcrumb[:name], breadcrumb[:path], class: "text-blue-600 hover:text-blue-800" %>
+          <span class="mx-2">/</span>
+        <% else %>
+          <span class="text-gray-700"><%= breadcrumb[:name] %></span>
+        <% end %>
+      </li>
+    <% end %>
+  </ol>
+</nav> 
