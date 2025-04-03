@@ -8,8 +8,8 @@
   <% if contract.arc56.present? %>
     <div class="my-5">
       <h3 class="text-lg font-medium">ARC56 Specification</h3>
-      <div class="mt-2 bg-gray-50 p-4 rounded-md overflow-auto">
-        <pre class="text-sm"><%= JSON.pretty_generate(JSON.parse(contract.arc56)) %></pre>
+      <div class="mt-2 bg-gray-50 p-4 rounded-md">
+        <pre class="text-sm w-full"><code class="language-json whitespace-pre-wrap break-all"><%= JSON.pretty_generate(JSON.parse(contract.arc56)) %></code></pre>
       </div>
     </div>
   <% end %>
@@ -76,3 +76,18 @@
     });
   }
 </script>
+
+<style>
+  /* Ensure JSON content wraps properly */
+  pre code.language-json {
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+    max-width: 100% !important;
+  }
+  
+  /* Remove horizontal scrolling from pre elements */
+  pre {
+    overflow-x: visible !important;
+    max-width: 100% !important;
+  }
+</style>
