@@ -43,7 +43,12 @@ Rails.application.routes.draw do
         member do
           get 'by_round/:round_number', to: 'contracts#by_round', as: :by_round
         end
+        collection do
+          get 'project/:abbreviation', to: 'contracts#project_contracts', as: :project_contracts
+        end
       end
+      
+      resources :projects, only: [:index]
     end
   end
 end
