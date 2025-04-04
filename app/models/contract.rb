@@ -82,9 +82,10 @@ class Contract < ApplicationRecord
       end
       
       # Validate description if present
-      if json_data.key?('description') && (!json_data['description'].is_a?(String) || json_data['description'].blank?)
-        errors.add(:arc56, "description must be a non-empty string")
-      end
+      # TODO: FIX THIS SHIT
+      # if json_data.key?('description') && (!json_data['description'].is_a?(String) || json_data['description'].blank?)
+      #   errors.add(:arc56, "description must be a non-empty string")
+      # end
       
       # Validate arcs array
       if !json_data['arcs'].is_a?(Array) || json_data['arcs'].empty?
@@ -126,9 +127,9 @@ class Contract < ApplicationRecord
         end
         
         # Validate method description if present
-        if method.key?('desc') && (!method['desc'].is_a?(String) || method['desc'].blank?)
-          errors.add(:arc56, "method '#{method['name']}' description must be a non-empty string")
-        end
+        # if method.key?('desc') && (!method['desc'].is_a?(String) || method['desc'].blank?)
+        #   errors.add(:arc56, "method '#{method['name']}' description must be a non-empty string")
+        # end
         
         # Validate args array
         if !method['args'].is_a?(Array)
@@ -162,9 +163,9 @@ class Contract < ApplicationRecord
             validate_type_reference(arg['type'], "method '#{method['name']}' arg at index #{arg_index}", json_data)
             
             # Validate arg description if present
-            if arg.key?('desc') && (!arg['desc'].is_a?(String) || arg['desc'].blank?)
-              errors.add(:arc56, "method '#{method['name']}' arg at index #{arg_index} description must be a non-empty string")
-            end
+            # if arg.key?('desc') && (!arg['desc'].is_a?(String) || arg['desc'].blank?)
+            #   errors.add(:arc56, "method '#{method['name']}' arg at index #{arg_index} description must be a non-empty string")
+            # end
           end
         end
         
@@ -178,9 +179,9 @@ class Contract < ApplicationRecord
           validate_type_reference(method['returns']['type'], "method '#{method['name']}' return", json_data)
           
           # Validate return description if present
-          if method['returns'].key?('desc') && (!method['returns']['desc'].is_a?(String) || method['returns']['desc'].blank?)
-            errors.add(:arc56, "method '#{method['name']}' return description must be a non-empty string")
-          end
+          # if method['returns'].key?('desc') && (!method['returns']['desc'].is_a?(String) || method['returns']['desc'].blank?)
+          #   errors.add(:arc56, "method '#{method['name']}' return description must be a non-empty string")
+          # end
         end
         
         # Validate readonly if present
@@ -235,9 +236,9 @@ class Contract < ApplicationRecord
               validate_type_reference(field['type'], "struct '#{struct_name}' field '#{field['name']}'", json_data)
               
               # Validate field description if present
-              if field.key?('desc') && (!field['desc'].is_a?(String) || field['desc'].blank?)
-                errors.add(:arc56, "struct '#{struct_name}' field '#{field['name']}' description must be a non-empty string")
-              end
+              # if field.key?('desc') && (!field['desc'].is_a?(String) || field['desc'].blank?)
+              #   errors.add(:arc56, "struct '#{struct_name}' field '#{field['name']}' description must be a non-empty string")
+              # end
             end
           end
         end
@@ -321,9 +322,9 @@ class Contract < ApplicationRecord
                       end
                       
                       # Validate description if present
-                      if key_info.key?('desc') && (!key_info['desc'].is_a?(String) || key_info['desc'].blank?)
-                        errors.add(:arc56, "state key '#{key_name}' in #{scope} description must be a non-empty string")
-                      end
+                      # if key_info.key?('desc') && (!key_info['desc'].is_a?(String) || key_info['desc'].blank?)
+                      #   errors.add(:arc56, "state key '#{key_name}' in #{scope} description must be a non-empty string")
+                      # end
                     end
                   end
                 end
@@ -360,9 +361,9 @@ class Contract < ApplicationRecord
             end
             
             # Validate event description if present
-            if event.key?('desc') && (!event['desc'].is_a?(String) || event['desc'].blank?)
-              errors.add(:arc56, "event '#{event['name']}' description must be a non-empty string")
-            end
+            # if event.key?('desc') && (!event['desc'].is_a?(String) || event['desc'].blank?)
+            #   errors.add(:arc56, "event '#{event['name']}' description must be a non-empty string")
+            # end
             
             # Validate args array
             if !event['args'].is_a?(Array)
@@ -395,9 +396,9 @@ class Contract < ApplicationRecord
                 validate_type_reference(arg['type'], "event '#{event['name']}' arg at index #{arg_index}", json_data)
                 
                 # Validate arg description if present
-                if arg.key?('desc') && (!arg['desc'].is_a?(String) || arg['desc'].blank?)
-                  errors.add(:arc56, "event '#{event['name']}' arg at index #{arg_index} description must be a non-empty string")
-                end
+                # if arg.key?('desc') && (!arg['desc'].is_a?(String) || arg['desc'].blank?)
+                #   errors.add(:arc56, "event '#{event['name']}' arg at index #{arg_index} description must be a non-empty string")
+                # end
               end
             end
           end
